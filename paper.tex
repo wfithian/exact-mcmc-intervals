@@ -1,0 +1,118 @@
+\documentclass{article}
+
+
+\usepackage[round]{natbib}
+\usepackage{amsmath,amssymb,amsthm,bm,enumerate,mathrsfs,mathtools}
+\usepackage{latexsym,color,verbatim,multirow}
+\usepackage[margin=1.3in]{geometry}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\tikzstyle{block} = [rectangle, draw, fill=white!20,
+    text width=7em, text centered, rounded corners, minimum height=4em]
+\tikzstyle{title} = [text width=7em, text centered, font=\bfseries]
+\tikzstyle{line} = [draw, -latex']
+
+\usepackage{mycommands}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{assumption}[theorem]{Assumption}
+\newtheorem{model}[theorem]{Model}
+\newtheorem{remark}[theorem]{Remark}
+
+\theoremstyle{definition}
+\newtheorem{example}{Example}
+
+\newcommand{\cM}{\mathcal{M}}
+\newcommand{\cH}{\mathcal{H}}
+\newcommand{\cD}{\mathcal{D}}
+\newcommand{\FDR}{\textnormal{FDR}}
+\newcommand{\FCR}{\textnormal{FCR}}
+\newcommand{\crt}{\phi}
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\cQ}{\mathcal{Q}}
+\newcommand{\cY}{\mathcal{Y}}
+\newcommand{\cX}{\mathcal{X}}
+\newcommand{\cV}{\mathcal{V}}
+\newcommand{\bX}{X}
+\newcommand{\bY}{\mathbf{Y}}
+\newcommand{\hcQ}{\widehat{\mathcal{Q}}}
+\newcommand{\bbeta}{{\bm\beta}}
+\newcommand{\beps}{{\bm\epsilon}}
+\newcommand{\bmu}{{\bm\mu}}
+\newcommand{\x}{\mathbf{x}}
+\newcommand{\Gv}{\;\;\big|\;\;}
+\newcommand{\proj}{\cP}
+\newcommand{\pow}{\text{Pow}}
+\newcommand{\sF}{\mathscr{F}}
+\newcommand{\msF}{m\mathscr{F}}
+\newcommand{\sC}{\mathscr{C}}
+\newcommand{\hM}{\widehat{M}}
+\newcommand{\hI}{\widehat{I}}
+\newcommand{\cI}{\mathcal{I}}
+\newcommand{\leqAS}{\overset{\textrm{a.s.}}{\leq}}
+\newcommand{\cL}{\mathcal{L}}
+
+\newcommand*\mystrut{\vrule width0pt height0pt depth1.5ex\relax}
+\newcommand{\underlabel}{\underbracket[1pt][.5pt]{\mystrut \quad\;\; \sub \quad\;\; }}
+\newcommand{\JTcomment}[1]{{\color{blue}{(JT: \bf \sc #1) }}}
+\newcommand{\WFcomment}[1]{{\color{red}{(WF: \bf \sc #1) }}}
+\newcommand{\paraOrSubsub}{\subsubsection}
+\newcommand{\sampOrData}{data }
+\newcommand{\capSampOrData}{Data }
+
+
+\begin{document}
+
+
+
+\title{Selective Inference for Maximizers}
+\author{William Fithian\\[5pt]
+{\normalsize Stanford University, Department of Statistics}}
+\maketitle
+
+
+\begin{abstract}
+  I propose several methods for inference on maximizers of a stochastic process.
+\end{abstract}
+
+
+\section{Introduction}
+
+\input{sections/introduction.tex}
+
+\section{Certifying a Winner}
+
+\input{sections/winner.tex}
+
+\section{Stepdown Procedures}
+
+\input{sections/stepdown.tex}
+
+\section{Maximizer of a Stochastic Process}
+
+\input{sections/functionalData.tex}
+
+\section{Discussion}
+
+\input{sections/discussion.tex}
+
+
+\begin{appendix}
+
+
+\section{Proofs of Main Theorems}
+
+\input{sections/proofs.tex}
+   
+\end{appendix}
+
+\end{document}
