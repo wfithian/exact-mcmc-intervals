@@ -63,7 +63,6 @@
 
 \newcommand*\mystrut{\vrule width0pt height0pt depth1.5ex\relax}
 \newcommand{\underlabel}{\underbracket[1pt][.5pt]{\mystrut \quad\;\; \sub \quad\;\; }}
-\newcommand{\JTcomment}[1]{{\color{blue}{(JT: \bf \sc #1) }}}
 \newcommand{\WFcomment}[1]{{\color{red}{(WF: \bf \sc #1) }}}
 \newcommand{\paraOrSubsub}{\subsubsection}
 \newcommand{\sampOrData}{data }
@@ -74,45 +73,81 @@
 
 
 
-\title{Selective Inference for Maximizers}
-\author{William Fithian\\[5pt]
-{\normalsize Stanford University, Department of Statistics}}
+\title{Exact Confidence Intervals via Markov Chain Monte Carlo}
+%\author{William Fithian\\[5pt]
+%{\normalsize UC Berkeley, Department of Statistics}}
 \maketitle
 
 
 \begin{abstract}
-  I propose several methods for inference on maximizers of a stochastic process.
+  \citet{besag1989generalized} propose two ingenious methods for testing a null hypothesis when we cannot sample from the null distribution, but we can construct a Markov chain whose stationary distribution is the null distribution. Both of their tests are exact level $\alpha$ even if the chain does not mix well. We show here how to generalize this method to obtain confidence intervals. We discuss applications to selective inference. 
 \end{abstract}
 
 
 \section{Introduction}
 
-\input{sections/introduction.tex}
+Consider data $X\in \cX$, arising from the model $X \sim \pi_\theta(x)$, with $\theta\in\R$. Based on the ideas of \citet{besag1989generalized}, if I can sample from $\pi_0$ via MCMC then I can test $H_0:\;\theta=0$. They propose two methods: the {\em parallel method}, which we address in Section~\ref{sec:parallel}, and the {\em serial method}, which we do not address. For simplicity we assume throughout that the state space $\cX$ is discrete.
 
-\section{Certifying a Winner}
+We consider here how to modify this method to construct a valid {\em confidence interval} for $\theta$. We would like to directly invert the test of \citet{besag1989generalized}, but that would involve running a chain with stationary distribution $\pi_{\theta_0}$ for every $\theta_0\in \R$: obviously an impractical solution. Can we instead re-use the data coming from the $\theta=0$ chain to test $H_0:\;\theta=\theta_0$, for every $\theta_0\in\R$?
 
-\input{sections/winner.tex}
+There are two hurdles to clear to obtain a confidence interval. First, we must be able to carry out an exact test of $H_0:\; \theta=\theta_0$ using a chain whose stationary distribution corresponds to $\theta=0$.
 
-\section{Stepdown Procedures}
+Second, we must somehow {\em couple} the tests of different $\theta_0\in \R$ so that inverting them actually yields an {\em integral}: that is, we hope to find $\theta_1\leq \theta_2$ such that every $\theta_0<\theta_1$ is rejected, as well as every $\theta_0>\theta_2$. Ideally, we would also have every $\theta_0\in [\theta_1,\theta_2]$ accepted, but this is not absolutely essential: as long as the confidence region $K=\{\theta_0:\; \theta=\theta_0 \text{ not rejected }\}$ is bounded, we can always return the interval $[\inf K, \sup K]$.
 
-\input{sections/stepdown.tex}
+\section{Modifying the Parallel Method}\label{sec:parallel}
 
-\section{Maximizer of a Stochastic Process}
+In the {\em parallel method}, we run the chain backward one step from $X$ to $Y$, and then run the chain forward one step from $Y$, in parallel, $B$ times to obtain $X_2,\ldots, X_n$. If $X$ is a sample from the stationary distribution of the Markov chain (as it is under the null hypothesis), then $(X,X_2,\ldots,X_n)$ is exchangeable. If $T(X)$ is any test statistic and $T_i=T(X_i)$, then the rank of $T(X)$ among $(T(X), T_2, \ldots, T_n)$  is therefore uniform under the null hypothesis that $\theta=0$.
 
-\input{sections/functionalData.tex}
+Assume that $P_0(x,y)$ is a Markov chain with stationary distribution $\pi_0$, and assume that $Q_0(x,y)$ is a valid ``backward step'' in the sense that 
+\[
+\pi_0(x)Q(x,y) = \pi_0(y)P(y,x)
+\]
 
-\section{Discussion}
+Let $\P_0$ denote the probability measure with $X\sim \pi_0$. Ten  $(X,X_2,\ldots,X_n)$ are exchangeable under the null because
+\begin{align}
+  \P_0(X,Y,X_{2:n})
+  &= \pi_0(X)Q_0(X,Y) \prod_{i=2}^n P_0(Y,X_i)\\
+  &= \pi_0(Y)P_0(Y,X) \prod_{i=2}^n P_0(Y,X_i),
+\end{align}
+which is plainly invariant to permuting $(X,X_2,\ldots,X_n)$. Moreover, $(X,X_2,\ldots,X_n)$ are actually conditionally independent given $Y$.
 
-\input{sections/discussion.tex}
+If $X\sim \pi_1$ instead, then the distribution is {\em not} exchangeable, since
+\[
+  \P_1(X, \,Y, \,X_{2:n})
+  = \frac{\pi_1(X)}{\pi_0(X)} \cdot \pi_0(Y)P_0(Y,X) \prod_{i=2}^n P_0(Y,X_i).
+\]
+
+\subsection{Accept/Reject Sampling}
+
+We can, however, use accept/reject sampling to achieve exchangeability among the accepted sample. Assume $c=\sup_{x\in\cX} \frac{\pi_1(x)}{\pi_0(x)} \leq \infty$.
+
+Then, taking $U_i \simiid U[0,1], i=2:n$ independently of the chain, let
+\[
+Z_i = \1\left\{U_i \leq \frac{\pi_1(X_i)}{c\pi_0(X_i)}\right\}.
+\]
+Finally, let $S=\{i: Z_i = 1\}$.
+
+The augmented likelihood of $(X,Y,X_{2:n}, Z_{2:n})$ is
+\begin{align}
+  \P_0(X,Y,X_{2:n},Z_{2:n}) 
+  &= \pi_1(X)Q_0(X,Y) \;\prod_{i\in S} P_0(Y,X_i)\frac{\pi_1(X_i)}{c\pi_0(X_i)}
+  \; \prod_{i\in S^C} P_0(Y,X_i)\left(1-\frac{\pi_1(X_i)}{c\pi_0(X_i)}\right)\\
+  &= c^{-|S|}\pi_0(Y)P_0(Y,X)\frac{\pi_1(X)}{\pi_0(X)} \;\prod_{i\in S} P_0(Y,X_i)\frac{\pi_1(X_i)}{\pi_0(X_i)}
+  \; \prod_{i\in S^C} P_0(Y,X_i)\left(1-\frac{\pi_1(X_i)}{c\pi_0(X_i)}\right).
+\end{align}
+Conditioning on the set $S=\{i_1,\ldots,i_{|S|}\}$ of accepted indices, the distribution of $(X, X_{i_1},\ldots,X_{i_{|S|}})$ is once again exchangeable.
+
+Note that this may not be a very good practical strategy if $c$ is huge.
+
+\subsection{Coupling the $U_i$ for Different $\theta_0$}
+
+Can we get a decent coupling?
 
 
-\begin{appendix}
+\bibliographystyle{plainnat}
+
+\bibliography{biblio}
 
 
-\section{Proofs of Main Theorems}
-
-\input{sections/proofs.tex}
-   
-\end{appendix}
 
 \end{document}
