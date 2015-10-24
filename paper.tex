@@ -135,11 +135,35 @@ The augmented likelihood of $(X,Y,X_{2:n}, Z_{2:n})$ is
 \end{align}
 Conditioning on the set $S=\{i_1,\ldots,i_{|S|}\}$ of accepted indices, the distribution of $(X, X_{i_1},\ldots,X_{i_{|S|}})$ is once again exchangeable.
 
-Note that this may not be a very good practical strategy if $c$ is huge.
+Note that this may not be a very good practical strategy if $c$ is huge. It may be advantageous to construct the chain with respect to a distribution that has somewhat heavier tails than the distribution for any $\theta_0$ (really, there is no requirement that $\pi_0$ should necessarily come from our model).
 
-\subsection{Coupling the $U_i$ for Different $\theta_0$}
+\subsection{Coupling the Tests for Different $\theta_0$}
 
-Can we get a decent coupling?
+Next we consider how to actually construct a confidence interval for $\theta$ once we know how to test any fixed hypothesis $H_0:\; \theta=\theta_0$ given the same sample. We assume that our model satisfies monotone likelihood ratio with respect to some test statistic $T(X)$. This assumption guarantees that a right-tailed test of $H_0:\; \theta=\theta_0$, based on $T(X)$, is conservative under $\theta\leq \theta_0$. That is, our procedure for testing $H_0:\; \theta=\theta_0$ is equivalent to testing $H_0:\; \theta\leq \theta_0$ when we use $T(X)$ as our test statistic. \WFcomment{show this also works for the conditional testing setup here}.
+
+To construct an exact (conservative) interval, we will first lay down a grid of $\theta$ values, $\theta_1 \leq \cdots \leq \theta_T$. For each $t=1,\ldots,T$, we will construct $p$-values $p_t^{\pm}$ for the hypotheses 
+\[
+H_t^-:\; \theta\leq \theta_t \quad \text{ and } \quad 
+H_t^+:\; \theta\geq \theta_t.
+\]
+
+By construction, the $p$-values will satisfy
+\[
+\P_\theta\left( p_t^- \leq \alpha) \leq \alpha, \quad \forall \theta\leq \theta_t.
+\]
+To make the $p$-values for different values of $t$ as correlated as possible, we will use the same $U_i$ for every $t$. We will not require any assumptions about independence of the $p$-values for different $t$, so this coupling does not affect the validity of our procedure in any way.
+
+To obtain the lower confidence bound we set
+\[
+C_{\text{lo}} = \inf\{\theta_t:\; p_t^- \leq \alpha/2\}
+\]
+with $C_{\text{lo}}=-\infty$ by convention if this set is empty. Analogously, we take the upper confidence bound to be 
+\[
+C_{\text{hi}} = \sup\{\theta_t:\; p_t^+ \leq \alpha/2\},
+\]
+with $C_{\text{hi}}=\infty$ if the set is empty.
+
+
 
 
 \bibliographystyle{plainnat}
